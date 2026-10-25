@@ -115,9 +115,13 @@
     const no = document.getElementById("no");
     const scare = document.getElementById("scare");
     const video = document.getElementById("scareVideo");
-    const card = document.getElementById("card");
 
-    yes.addEventListener("click", async () => {
+    let playing = false;
+
+    async function triggerJumpscare() {
+      if (playing) return;
+
+      playing = true;
       scare.style.display = "flex";
 
       video.currentTime = 0;
@@ -127,22 +131,22 @@
       try {
         await video.play();
       } catch (error) {
+        playing = false;
         scare.style.display = "none";
-        alert("Video could not play. Check that jeff.mp4 is uploaded correctly.");
-      }
-    });
 
-    no.addEventListener("click", () => {
-      card.innerHTML = `
-        <h1>Fair enough...</h1>
-        <p>Have a spooky day anyway.</p>
-        <button onclick="location.reload()">Try again</button>
-      `;
-    });
+        alert(
+          "Video could not play. Check that jeff.mp4 is uploaded correctly."
+        );
+      }
+    }
+
+    yes.addEventListener("click", triggerJumpscare);
+    no.addEventListener("click", triggerJumpscare);
 
     video.addEventListener("ended", () => {
       scare.style.display = "none";
       video.currentTime = 0;
+      playing = false;
     });
   </script>
 
