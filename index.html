@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Halloween Question</title>
+  <title>Halloween Quiz :D</title>
 
   <style>
     * {
@@ -71,7 +71,7 @@
       position: fixed;
       inset: 0;
       z-index: 10;
-      background: black;
+      background: rgb(255, 251, 251);
       justify-content: center;
       align-items: center;
     }
@@ -93,14 +93,14 @@
 <body>
 
   <main class="card" id="card">
-    <h1>Halloween</h1>
+    <h1>Halloween Quiz 🎃🦴 </h1>
 
-    <p>Are you celebrating Halloween this year?</p>
+    <p> Q1) Fêtez-vous Halloween cette année ? 🎃</p>
 
     <button id="yes">YES</button>
     <button id="no">NO</button>
 
-    <p class="warning">Choose your answer...</p>
+    <p class="warning">Choose your answer to move on...</p>
   </main>
 
   <div id="scare">
@@ -115,13 +115,9 @@
     const no = document.getElementById("no");
     const scare = document.getElementById("scare");
     const video = document.getElementById("scareVideo");
+    const card = document.getElementById("card");
 
-    let playing = false;
-
-    async function triggerJumpscare() {
-      if (playing) return;
-
-      playing = true;
+    yes.addEventListener("click", async () => {
       scare.style.display = "flex";
 
       video.currentTime = 0;
@@ -131,22 +127,22 @@
       try {
         await video.play();
       } catch (error) {
-        playing = false;
         scare.style.display = "none";
-
-        alert(
-          "Video could not play. Check that jeff.mp4 is uploaded correctly."
-        );
+        alert("Video could not play. Check that jeff.mp4 is uploaded correctly.");
       }
-    }
+    });
 
-    yes.addEventListener("click", triggerJumpscare);
-    no.addEventListener("click", triggerJumpscare);
+    no.addEventListener("click", () => {
+      card.innerHTML = `
+        <h1>Fair enough...</h1>
+        <p>Have a spooky day anyway.</p>
+        <button onclick="location.reload()">Try again</button>
+      `;
+    });
 
     video.addEventListener("ended", () => {
       scare.style.display = "none";
       video.currentTime = 0;
-      playing = false;
     });
   </script>
 
