@@ -71,7 +71,7 @@
       position: fixed;
       inset: 0;
       z-index: 10;
-      background: rgb(255, 251, 251);
+      background: black;
       justify-content: center;
       align-items: center;
     }
@@ -93,9 +93,9 @@
 <body>
 
   <main class="card" id="card">
-    <h1>Halloween Quiz 🎃🦴 </h1>
+    <h1>Halloween Quiz 🎃🦴</h1>
 
-    <p> Q1) Fêtez-vous Halloween cette année ? 🎃</p>
+    <p>Q1) Fêtez-vous Halloween cette année ? 🎃</p>
 
     <button id="yes">YES</button>
     <button id="no">NO</button>
@@ -115,9 +115,14 @@
     const no = document.getElementById("no");
     const scare = document.getElementById("scare");
     const video = document.getElementById("scareVideo");
-    const card = document.getElementById("card");
 
-    yes.addEventListener("click", async () => {
+    let alreadyPlayed = false;
+
+    async function triggerJumpscare() {
+      if (alreadyPlayed) return;
+
+      alreadyPlayed = true;
+
       scare.style.display = "flex";
 
       video.currentTime = 0;
@@ -127,22 +132,24 @@
       try {
         await video.play();
       } catch (error) {
+        alreadyPlayed = false;
         scare.style.display = "none";
-        alert("Video could not play. Check that jeff.mp4 is uploaded correctly.");
+
+        alert(
+          "Video could not play. Make sure jeff.mp4 is uploaded correctly."
+        );
       }
-    });
+    }
 
-    no.addEventListener("click", () => {
-      card.innerHTML = `
-        <h1>Fair enough...</h1>
-        <p>Have a spooky day anyway.</p>
-        <button onclick="location.reload()">Try again</button>
-      `;
-    });
+    // Both answers trigger the jumpscare
+    yes.addEventListener("click", triggerJumpscare);
+    no.addEventListener("click", triggerJumpscare);
 
+    // Hide the video when it finishes
     video.addEventListener("ended", () => {
       scare.style.display = "none";
       video.currentTime = 0;
+      alreadyPlayed = false;
     });
   </script>
 
